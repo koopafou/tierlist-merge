@@ -8,7 +8,7 @@
 
 struct ScoringConf {
 	std::string name;
-	int baseparts;
+	float baseparts;
 };
 
 struct Score {
@@ -25,7 +25,7 @@ struct Score {
 	}
 
 	void add_tl (const std::vector<std::vector<int>>& tiers) {
-		int parts = 0;
+		float parts = 0;
 		for (int tier = 0; tier < tiers.size(); ++tier)
 			parts += (conf->baseparts + tiers.size() - tier - 1) * tiers[tier].size();
 		float div = 1.f / parts;

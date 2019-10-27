@@ -1,8 +1,9 @@
 Raw 0
-Smooth-1 1
-Smooth-10 10
+WeakSmooth 0.1
+Smooth 1
+BigSmooth 16
 +Reimu Marisa Sakuya Youmu Reisen Cirno Lyrica Merlin Lunasa Mystia Tewi Aya Medicine Yuuka Komachi Eiki
--Lesbea
+-Framboise
 S : Eiki Reimu Marisa Youmu Komachi
 A : Medicine Lyrica Yuuka
 B : Lunasa Merlin Reisen
@@ -83,4 +84,15 @@ Top (Semi) : Youmu
 High       : Komachi Eiki Lyrica
 Mid        : Medicine
 Low        : Yuuka Lunasa Merlin
-Botton     : Sakuya Mystia Reisen Cirno Tewi Aya
+Bottom     : Sakuya Mystia Reisen Cirno Tewi Aya
+-Ctrekoz
+S+++ : Eiki
+S++ : Reimu
+S+ : Marisa Youmu
+S : Komachi Lyrica
+S- : Reisen
+A+ : Sakuya
+A : Yuuka Lunasa Aya
+A- : Medicine Tewi Mystia
+B+ : Cirno
+B : Merlin
