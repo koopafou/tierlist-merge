@@ -87,12 +87,17 @@ Low        : Yuuka Lunasa Merlin
 Bottom     : Sakuya Mystia Reisen Cirno Tewi Aya
 -Ctrekoz
 S+++ : Eiki
-S++ : Reimu
-S+ : Marisa Youmu
-S : Komachi Lyrica
-S- : Reisen
-A+ : Sakuya
-A : Yuuka Lunasa Aya Medicine
-A- : Tewi Mystia
-B+ : Cirno
-B : Merlin
+S++  : Reimu
+S+   : Marisa Youmu
+S    : Komachi Lyrica
+S-   : Reisen
+A+   : Sakuya
+A    : Yuuka Lunasa Aya Medicine
+A-   : Tewi Mystia
+B+   : Cirno
+B    : Merlin
+-Zil
+Top  : Marisa Reimu Youmu
+High : Komachi Lyrica
+Mid  : Eiki Medicine Yuuka
+Low  : Aya Reisen Cirno Merlin Lunasa Mystia Tewi Sakuya
