@@ -85,13 +85,11 @@ Mid        : Medicine
 Low        : Yuuka Lunasa Merlin
 Bottom     : Sakuya Mystia Reisen Cirno Tewi Aya
 -Ctrekoz
-S   : Reimu Youmu Marisa
-S-  : Eiki Komachi Lyrica
-A+  : Reisen Sakuya
-A   : Medicine Yuuka Lunasa Aya Tewi
-A-  : Mystia
-B+  : Cirno
-B   : Merlin
+S : Youmu Marisa Reimu
+A : Eiki Komachi Lyrica
+B : Medicine Reisen Sakuya Yuuka
+C : Merlin Lunasa Aya
+D :  Mystia Tewi Cirno
 -Zil
 Top  : Marisa Reimu Youmu
 High : Komachi Lyrica
