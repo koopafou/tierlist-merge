@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <iomanip>
 
@@ -8,27 +9,27 @@
 
 struct ScoringConf {
 	std::string name;
-	float baseparts;
+	double baseparts;
 };
 
 struct Score {
 	const ScoringConf* conf;
-	std::vector<float> pickscores;
+	std::vector<double> pickscores;
 	std::vector<int> ranking;
 
 	Score (int sz)
 		: conf(nullptr)
-		, pickscores(sz, 0.f)
+		, pickscores(sz, 0.0)
 		, ranking(sz) {
 		for (int i = 0; i < sz; ++i)
 			ranking[i] = i;
 	}
 
 	void add_tl (const std::vector<std::vector<int>>& tiers) {
-		float parts = 0;
+		double parts = 0;
 		for (int tier = 0; tier < tiers.size(); ++tier)
 			parts += (conf->baseparts + tiers.size() - tier - 1) * tiers[tier].size();
-		float div = 1.f / parts;
+		double div = 1.0 / parts;
 		for (int tier = 0; tier < tiers.size(); ++tier)
 			for (int pick = 0; pick < tiers[tier].size(); ++pick)
 				pickscores[tiers[tier][pick]] += div * (conf->baseparts + tiers.size() - tier - 1);
@@ -41,7 +42,30 @@ struct Score {
 	}
 };
 
-int main () {
+#define SHIFT() ++arg; if (arg == argc) return 1
+
+int main (int argc, char** argv) {
+	bool diffrank = false;
+	bool graph = false;
+	int gr_height = 0;
+	int gr_picbox = 0;
+	std::string graph_pics;
+	for (int arg = 1; arg < argc; ++arg) {
+			if (std::string("--diff") == argv[arg])
+				diffrank = true;
+			if (std::string("--graph") == argv[arg]) {
+				graph = true;
+				SHIFT();
+				graph_pics = argv[arg];
+				SHIFT();
+				gr_height = std::atoi(argv[arg]);
+				SHIFT();
+				gr_picbox = std::atoi(argv[arg]);
+			}
+	}
+
+	constexpr int scorescale = 100000;
+
 	std::vector<ScoringConf> confs;
 	while (std::cin.peek() != '+') {
 		ScoringConf conf;
@@ -65,6 +89,14 @@ int main () {
 		pickmap[pick] = picksz;
 		++picksz;
 	}
+
+	int gr_width = gr_picbox * picksz;
+	std::ofstream sgraph;
+	if (graph) {
+		sgraph.open("magick-ranking", std::ios_base::out);
+		sgraph << "-size " << gr_width << "x" << gr_height << " xc:none ";
+	}
+
 	std::vector<Score> scores(confs.size(), picksz);
 	for (int cf = 0; cf < confs.size(); ++cf)
 		scores[cf].conf = &confs[cf];
@@ -147,19 +179,38 @@ int main () {
 		space(spc_confname(cf), spc_pickname);
 	}
 	std::cout << '\n';
+	double prevscore = 0.0;
 	for (int j = 0; j < picksz; ++j) {
 		for (int cf = 0; cf < scores.size(); ++cf) {
-			float scoremax = scores[cf].pickscores[scores[cf].ranking[0]];
-			float scoremin = scores[cf].pickscores[scores[cf].ranking.back()];
+			double scoremax = scores[cf].pickscores[scores[cf].ranking[0]];
+			double scoremin = scores[cf].pickscores[scores[cf].ranking.back()];
 			int i = scores[cf].ranking[j];
-			float score = 100000.f * (scores[cf].pickscores[i] - scoremin) / (scoremax - scoremin);
+			double normscore = (scores[cf].pickscores[i] - scoremin) / (scoremax - scoremin);
+			double score = scorescale * normscore;
 			std::cout << picknames[i];
 			space(picknames[i].length(), maxlen);
-			std::cout << " : " << std::setw(score_width) << std::right << score << "   ";
+			std::cout << " : " << std::setw(score_width) << std::right;
+			if (!diffrank)
+				std::cout << score << "   ";
+			else if (j == 0)
+				std::cout << "   ";
+			else
+				std::cout << (prevscore - score) << "   ";
+			prevscore = score;
 			space(spc_pickname, spc_confname(cf));
+			if (graph) {
+				sgraph << "( -resize " << gr_picbox << "x" << gr_picbox << " "
+				       << graph_pics << "/" << picknames[i] << ".png )"
+				       << " -geometry "
+				       << "+" << (int)((1 - (double)j / (picksz-1)) * (gr_width - gr_picbox))
+				       << "+" << (int)((1 - normscore) * (gr_height - gr_picbox))
+				       << " -composite ";
+			}
 		}
 		std::cout << '\n';
 	}
 	std::cout << std::flush;
+	if (graph)
+		sgraph << " ranks.png" << std::endl;
 	return 0;
 }

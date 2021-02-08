@@ -1,4 +1,18 @@
 > g++ -std=c++17 main.cc
-> ./a.out < pofv
+
+Reads tierlists from stdin, with the following format :
+> (Confname Confargs...\n)...
+> +Picknames...
+> (-Votename\n
+>  (Tiername : Picknames...\n)...)...
+
+At least one Confname must be specified, the only argument currently valid is a single value.
+
+Options :
+	--diff :
+		Print score difference with the rank above instead of absolute value.
+	--graph image-folder dst-height src-resize :
+		Write an imagemagick script in magick-ranking that can generate a visual representation of the ranking.
+
 
 Enjoy.
