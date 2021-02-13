@@ -45,12 +45,15 @@ struct Score {
 #define SHIFT() ++arg; if (arg == argc) return 1
 
 int main (int argc, char** argv) {
+	bool flip = false;
 	bool diffrank = false;
 	bool graph = false;
 	int gr_height = 0;
 	int gr_picbox = 0;
 	std::string graph_pics;
 	for (int arg = 1; arg < argc; ++arg) {
+			if (std::string("--flip") == argv[arg])
+				flip = true;
 			if (std::string("--diff") == argv[arg])
 				diffrank = true;
 			if (std::string("--graph") == argv[arg]) {
@@ -199,10 +202,13 @@ int main (int argc, char** argv) {
 			prevscore = score;
 			space(spc_pickname, spc_confname(cf));
 			if (graph) {
+				double x = (double)j / (picksz-1);
+				if (!flip)
+					x = 1 - x;
 				sgraph << "( -resize " << gr_picbox << "x" << gr_picbox << " "
 				       << graph_pics << "/" << picknames[i] << ".png )"
 				       << " -geometry "
-				       << "+" << (int)((1 - (double)j / (picksz-1)) * (gr_width - gr_picbox))
+				       << "+" << (int)(x * (gr_width - gr_picbox))
 				       << "+" << (int)((1 - normscore) * (gr_height - gr_picbox))
 				       << " -composite ";
 			}
